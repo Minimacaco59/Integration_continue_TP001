@@ -1,4 +1,4 @@
-package cicd.learn.tp;
+package cicd.learn.tp1;
 
 /**
  * Hello world!
