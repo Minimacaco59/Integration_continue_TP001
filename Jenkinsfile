@@ -16,14 +16,29 @@ pipeline {
                 // bat "mvn -Dmaven.test.failure.ignore=true clean package"
             }
 
-            post {
-                // If Maven was able to run the tests, even if some of the test
-                // failed, record the test results and archive the jar file.
-                success {
-                    junit '**/target/surefire-reports/TEST-*.xml'
-                    archiveArtifacts 'target/*.jar'
-                }
+        stage('Analyse'){
+            steps{
+                bat "mvn checkstyle:checkstyle"
+                bat "mvn spotbugs:spotbugs"
+                bat "mvn pmd:pmd"
             }
         }
+
+        stage('Publish') {
+            steps{
+                archiveArtifacts 'target/*.jar'
+            }
+        }
+    }
+    
+    post {
+        always{
+            junit '**/surefire-reports/*.xml'
+            recordIssues enabledForFailure: true, tools: [mavenConsole(), java(), javaDoc()]
+            recordIssues enabledForFailure: true, tool: checkStyle()
+            recordIssues enabledForFailure: true, tool: spotBugs()
+            recordIssues enabledForFailure: true, tool: cpd(pattern: '**/target/cpd.xml')
+            recordIssues enabledForFailure: true, tool: pmdParser(pattern: '**/target/pmd.xml')
+        }           
     }
 }
