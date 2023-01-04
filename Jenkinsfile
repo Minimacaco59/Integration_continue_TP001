@@ -19,14 +19,14 @@ pipeline {
             steps{
                 bat "mvn checkstyle:checkstyle"
                 // bat "mvn spotbugs:spotbugs"
-                bat "mvn com.github.spotbugs:spotbugs-maven-plugin:3.1.7:spotbugs"
+                bat "mvn com.github.spotbugs:spotbugs-maven-plugin:4.7.3.0:spotbugs"
                 bat "mvn pmd:pmd"
             }
         }
 
         stage('Publish') {
             steps{
-                archiveArtifacts 'target/*.jar'
+                archiveArtifacts '/target/*.jar'
             }
         }
     }
