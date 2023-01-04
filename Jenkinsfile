@@ -18,7 +18,8 @@ pipeline {
         stage('Analyse'){
             steps{
                 bat "mvn checkstyle:checkstyle"
-                bat "mvn spotbugs:spotbugs"
+                // bat "mvn spotbugs:spotbugs"
+                bat "mvn com.github.spotbugs:spotbugs-maven-plugin:3.1.7:spotbugs"
                 bat "mvn pmd:pmd"
             }
         }
